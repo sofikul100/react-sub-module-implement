@@ -3,6 +3,7 @@ import { AnimatePresence, } from "framer-motion";
 import Home from "./Pages/Home";
 import About from "./Pages/About";
 import Text from "./Pages/Text";
+import Rest from "./Pages/Rest";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -13,6 +14,7 @@ function AnimatedRoutes() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/text" element={<Text />} />
+        <Route path="/rest" element={<Rest />} />
       </Routes>
     </AnimatePresence>
   );
@@ -25,7 +27,7 @@ function App() {
         <Link className="bg-rose-600 mt-2 px-2 py-1 rounded-sm text-white" to="/">Home</Link>
         <Link className="bg-sky-600 mt-2 px-2 py-1 rounded-sm text-white"  to="/about">About</Link>
         <Link className="bg-sky-600 mt-2 px-2 py-1 rounded-sm text-white"  to="/text">Text</Link>
-        <Link className="bg-sky-600 mt-2 px-2 py-1 rounded-sm text-white"  to="/text">Rest</Link>
+        <Link className="bg-sky-600 mt-2 px-2 py-1 rounded-sm text-white"  to="/rest">Rest</Link>
       </nav>
       <AnimatedRoutes />
     </Router>
