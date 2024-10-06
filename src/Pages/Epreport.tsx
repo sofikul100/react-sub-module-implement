@@ -1,13 +1,4 @@
 import React, { useState } from "react";
-import {
-  Page,
-  Text,
-  View,
-  Document,
-  StyleSheet,
-  PDFDownloadLink,
-  PDFViewer,
-} from "@react-pdf/renderer";
 import * as XLSX from "xlsx"; // Import the xlsx library
 
 // Define the Employee type
@@ -30,121 +21,85 @@ const employeesData: Employee[] = [
   { id: 108, name: "David Black", position: "Finance", checked: false },
   { id: 109, name: "Laura Blue", position: "IT Support", checked: false },
   { id: 110, name: "Kevin Grey", position: "Admin", checked: false },
-  {
-    id: 111,
-    name: "Sophia Yellow",
-    position: "Customer Service",
-    checked: false,
-  },
+  { id: 111, name: "Sophia Yellow", position: "Customer Service", checked: false },
   { id: 112, name: "James Red", position: "Security", checked: false },
   { id: 113, name: "Olivia Pink", position: "Developer", checked: false },
   { id: 114, name: "Daniel Orange", position: "Legal", checked: false },
-  {
-    id: 115,
-    name: "Ava Purple",
-    position: "Executive Assistant",
-    checked: false,
-  },
+  { id: 115, name: "Ava Purple", position: "Executive Assistant", checked: false },
   { id: 116, name: "William Silver", position: "Operations", checked: false },
   { id: 117, name: "Isabella Gold", position: "Procurement", checked: false },
-  {
-    id: 118,
-    name: "Mason Brown",
-    position: "Business Analyst",
-    checked: false,
-  },
+  { id: 118, name: "Mason Brown", position: "Business Analyst", checked: false },
   { id: 119, name: "Mia Black", position: "Project Manager", checked: false },
   { id: 120, name: "Ethan White", position: "Product Manager", checked: false },
 ];
 
-// Create styles for PDF
-const styles = StyleSheet.create({
-  page: {
-    flexDirection: "column",
-    padding: 20,
-  },
-  section: {
-    marginBottom: 10,
-    padding: 10,
-    border: "1px solid #ccc",
-  },
-  header: {
-    fontSize: 18,
-    marginBottom: 10,
-    textAlign: "center",
-    fontWeight: "bold",
-  },
-  employeeRow: {
-    fontSize: 12,
-    marginBottom: 4,
-  },
-});
-
-// Helper function to chunk the employees array into pages (9 items per page)
-const chunkArray = (array: Employee[], size: number): Employee[][] => {
-  const result: Employee[][] = [];
-  for (let i = 0; i < array.length; i += size) {
-    result.push(array.slice(i, i + size));
-  }
-  return result;
-};
-
-// Define the PDF Document
-const EmployeePDF: React.FC = () => {
-  // Paginate employees into chunks of 9 per page
-  const pages = chunkArray(employeesData, 9);
-
-  return (
-    <Document>
-      {pages.map((employees, pageIndex) => (
-        <Page key={pageIndex} style={styles.page}>
-          <Text style={styles.header}>
-            Employee List - Page {pageIndex + 1}
-          </Text>
-          {employees.map((employee) => (
-            <View key={employee.id} style={styles.section}>
-              <Text style={styles.employeeRow}>ID: {employee.id}</Text>
-              <Text style={styles.employeeRow}>Name: {employee.name}</Text>
-              <Text style={styles.employeeRow}>
-                Position: {employee.position}
-              </Text>
-            </View>
-          ))}
-        </Page>
-      ))}
-    </Document>
-  );
-};
-
 // Main component
 const EmployeeExcelGenerator: React.FC = () => {
-  const [employees, setEmployees] = useState<Employee[]>(employeesData);
-  const [showViewer, setShowViewer] = useState(false);
-
-  const toggleViewer = () => setShowViewer(!showViewer);
+  const [employees] = useState<Employee[]>(employeesData);
 
   // Function to handle Excel download
   const downloadExcel = () => {
     // Create a new workbook
     const workbook = XLSX.utils.book_new();
-    // Convert employee data to a worksheet
-    const worksheet = XLSX.utils.json_to_sheet(employees);
+
+    // Add company name and address
+    const companyName = "Your Company Name";
+    const address = "123 Company Address, City, Country";
+    const reportTitle = "Employee List Report";
+
+    // Create an empty worksheet
+    const worksheetData = [
+      [companyName],
+      [address],
+      [reportTitle],
+      [], // Empty row for spacing
+      ["ID", "Name", "Position"], // Headers for the employee data
+    ];
+
+    // Convert the employee data into rows
+    employees.forEach(employee => {
+      worksheetData.push([employee.id, employee.name, employee.position]);
+    });
+
+    // Create the worksheet from the data
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+
+    // Set styles for the header row
+    const headerCellRange = XLSX.utils.decode_range(worksheet['!ref']);
+    for (let col = headerCellRange.s.c; col <= headerCellRange.e.c; col++) {
+      const cell = worksheet[XLSX.utils.encode_cell({ r: 4, c: col })]; // Header row index is 4
+      if (cell) {
+        cell.s = {
+          fill: {
+            fgColor: { rgb: "FFD700" }, // Header background color
+          },
+          font: {
+            bold: true,
+          },
+          alignment: {
+            horizontal: "center",
+          },
+        };
+      }
+    }
+
+    // Set row heights
+    const rowHeight = 20; // Set desired height for rows
+    for (let row = headerCellRange.s.r; row <= headerCellRange.e.r; row++) {
+      worksheet['!rows'] = worksheet['!rows'] || [];
+      worksheet['!rows'][row] = { hpx: rowHeight };
+    }
+
     // Append the worksheet to the workbook
     XLSX.utils.book_append_sheet(workbook, worksheet, "Employees");
+
     // Export the workbook to an Excel file
     XLSX.writeFile(workbook, "employee_list.xlsx");
   };
 
   return (
     <div className="p-6">
-      <h2 className="text-lg font-bold mb-4">Employee PDF Options</h2>
-
-      {/* Download PDF Button */}
-      <PDFDownloadLink document={<EmployeePDF />} fileName="employee_list.pdf">
-        {({ loading }: { loading: boolean }) =>
-          loading ? "Loading PDF..." : "Download PDF"
-        }
-      </PDFDownloadLink>
+      <h2 className="text-lg font-bold mb-4">Employee Excel Generator</h2>
 
       {/* Download Excel Button */}
       <button
@@ -153,38 +108,6 @@ const EmployeeExcelGenerator: React.FC = () => {
       >
         Download Excel
       </button>
-
-      {/* View PDF Button */}
-      <button
-        onClick={toggleViewer}
-        className="ml-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
-      >
-        {showViewer ? "Hide PDF Viewer" : "View PDF"}
-      </button>
-
-      {/* Tailwind Modal */}
-      {showViewer && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center h-screen w-screen bg-white"
-          style={{ maxHeight: "100vh" }}
-        >
-          <div className="relative w-full h-full">
-            {/* Close Button */}
-            <button
-              onClick={toggleViewer}
-              className="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
-            >
-              ✖
-            </button>
-            <div className="h-full w-full p-4 bg-white rounded-lg shadow-lg">
-              {/* PDF Viewer with fit to page */}
-              <PDFViewer width="100%" height="100%" scaleMode="pageWidth">
-                <EmployeePDF />
-              </PDFViewer>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

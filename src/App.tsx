@@ -7,6 +7,8 @@ import Rest from "./Pages/Rest";
 import Pdf from "./Pages/Pdf";
 import EmployeePdfGenerator from "./Pages/Epreport";
 import EmployeeExcelGenerator from "./Pages/Epreport";
+import ImageGallery from "./Pages/ImagePhoto";
+import ProductList from "./Pages/LoadMore";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -20,6 +22,8 @@ function AnimatedRoutes() {
         <Route path="/rest" element={<Rest />} />
         <Route path="/pdf" element={<Pdf />} />
         <Route path="/excel" element={< EmployeeExcelGenerator />} />
+        <Route path="/image" element={< ImageGallery />} />
+        <Route path="/productList" element={< ProductList />} />
       </Routes>
     </AnimatePresence>
   );
@@ -35,6 +39,8 @@ function App() {
         <Link className="bg-green-600 mt-2 px-2 py-1 rounded-sm text-white"  to="/rest">Rest</Link>
         <Link className="bg-orange-600 mt-2 px-2 py-1 rounded-sm text-white"  to="/pdf">Pdf Format</Link>
         <Link className="bg-indigo-600 mt-2 px-2 py-1 rounded-sm text-white"  to="/excel">Excel Format</Link>
+        <Link className="bg-pink-600 mt-2 px-2 py-1 rounded-sm text-white"  to="/image">Image Multiple</Link>
+        <Link className="bg-sky-600 mt-2 px-2 py-1 rounded-sm text-white"  to="/productList">Product Load</Link>
       </nav>
       <AnimatedRoutes />
     </Router>
