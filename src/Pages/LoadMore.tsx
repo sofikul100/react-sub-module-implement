@@ -56,7 +56,7 @@ const ProductList: React.FC = () => {
 
   // Animation variants for products
   const productVariants = {
-    hidden: { opacity: 0, y: 20 }, // Start hidden and slightly moved down
+    hidden: { opacity: 0, y: -40 }, // Start hidden and slightly moved down
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }, // Fade in and move up smoothly
   };
 
