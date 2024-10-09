@@ -9,7 +9,7 @@ interface Image {
 
 const ImageGallery: React.FC = () => {
   const [images, setImages] = useState<Image[]>([]); // State to store images
-  const [selectedImage, setSelectedImage] = useState<Image | null>(null); // To track which image is being edited
+   // To track which image is being edited
 
   // Handle file upload and add to the image array
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>): void => {

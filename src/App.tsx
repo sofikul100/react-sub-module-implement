@@ -9,6 +9,8 @@ import EmployeePdfGenerator from "./Pages/Epreport";
 import EmployeeExcelGenerator from "./Pages/Epreport";
 import ImageGallery from "./Pages/ImagePhoto";
 import ProductList from "./Pages/LoadMore";
+import GeneratePdf from "./Pages/GeneratePdf";
+import GsapAnimation from "./Pages/GsapAnimation";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -24,6 +26,8 @@ function AnimatedRoutes() {
         <Route path="/excel" element={< EmployeeExcelGenerator />} />
         <Route path="/image" element={< ImageGallery />} />
         <Route path="/productList" element={< ProductList />} />
+        <Route path="/generatepdf" element={< GeneratePdf />} />
+        <Route path="/gsap" element={< GsapAnimation />} />
       </Routes>
     </AnimatePresence>
   );
@@ -32,7 +36,7 @@ function AnimatedRoutes() {
 function App() {
   return (
     <Router>
-      <nav className="flex space-x-4 mx-4">
+      {/* <nav className="flex space-x-4 mx-4">
         <Link className="bg-rose-600 mt-2 px-2 py-1 rounded-sm text-white" to="/">Home</Link>
         <Link className="bg-sky-600 mt-2 px-2 py-1 rounded-sm text-white"  to="/about">About</Link>
         <Link className="bg-gray-600 mt-2 px-2 py-1 rounded-sm text-white"  to="/text">Text</Link>
@@ -41,7 +45,9 @@ function App() {
         <Link className="bg-indigo-600 mt-2 px-2 py-1 rounded-sm text-white"  to="/excel">Excel Format</Link>
         <Link className="bg-pink-600 mt-2 px-2 py-1 rounded-sm text-white"  to="/image">Image Multiple</Link>
         <Link className="bg-sky-600 mt-2 px-2 py-1 rounded-sm text-white"  to="/productList">Product Load</Link>
-      </nav>
+        <Link className="bg-rose-600 mt-2 px-2 py-1 rounded-sm text-white"  to="/generatepdf">Generate Pdf</Link>
+        <Link className="bg-orange-600 mt-2 px-2 py-1 rounded-sm text-white"  to="/gsap">Gsap Animation</Link>
+      </nav> */}
       <AnimatedRoutes />
     </Router>
   );
